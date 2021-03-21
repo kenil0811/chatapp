@@ -8,7 +8,13 @@ const router = require('./router');
 
 const app = express();
 const server = http.createServer(app);
-const io = socketio(server);
+const io = socketio(server, {
+    cors: {
+        origin: "http://3.12.107.87",
+        methods: ["GET", "POST"],
+        credentials: true
+      }
+});
 
 const { addUser, removeUser, getUser, getUsersInRoom} = require('./users.js');
 
