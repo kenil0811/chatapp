@@ -1,0 +1,10 @@
+.chat-body{
+    position: sticky;
+    flex: 1;
+    padding: 20px 30px 30px 30px;
+    overflow-y: hidden;
+    overflow-x: hidden;
+    background-color: #dddddd;
+    height: 51vh;
+    max-height: 60vh;
+}

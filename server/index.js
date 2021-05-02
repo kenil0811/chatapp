@@ -10,52 +10,79 @@ const app = express();
 const server = http.createServer(app);
 const io = socketio(server, {
     cors: {
-        origin: "http://3.12.107.87",
+        origin: "http://localhost:3000",
         methods: ["GET", "POST"],
         credentials: true
       }
 });
 
-const { addUser, removeUser, getUser, getUsersInRoom} = require('./users.js');
+const users = require('./users');
+const messages = require('./messages');
 
 app.use(router);
 server.listen(PORT, () => console.log(`Server has startted on port ${PORT}`));
 
-io.on('connection', (socket) => {
+const nsp = io.of(/\/[0-9]*/);
+
+nsp.on('connection', (socket) => {
     console.log('We have a new connection!!');
 
-    socket.on('join', ({ name, room }, callback) => {
-        console.log(name, room);
-        const {error, user} = addUser({ id: socket.id, name, room});
-        console.log(user);
+    socket.on('join2', ({ userId, namespaceId}, callback) => {
+        console.log('User joined... ',userId)
+        // socket.join(userId);
+        nsp.emit('roomData', { users: users.getUsersInNamespace(namespaceId)});
+        callback()
+        // console.log('hey2')
+    })
 
-        if(error) return callback(error);
+    socket.on('joinChat', ({ userId }, callback) => {
+        console.log('User Chat joined... ',userId)
+        // console.log(typeof userId)
+        socket.join(userId);
+        callback()
+    })
 
-        socket.join(user.room);
+    socket.on('leave', ({ userId }, callback) => {
+        console.log('leaving... ', userId)
+        socket.leave(userId);
+        callback()
+    })
+    
 
-        socket.emit('message', { user: 'admin', text: `${user.name}, welcome to  the room ${user.room}`});
-        socket.broadcast.to(user.room).emit('message', { user: 'admin', text: `${user.name} has joined the room ${user.room}`});
+    socket.on('sendMessage', ({ fromUserId, toUserId, message}, callback) => {
+        console.log(socket.id, fromUserId, toUserId);
+        // console.log(typeof fromUserId, typeof toUserId)
+        // const user = users.getUser(fromUserId);
 
-        io.to(user.room).emit('roomData', { room: user.room, users: getUsersInRoom(user.room) });
+        const newMessage = messages.addMessage(fromUserId, toUserId, message)
+
+        // console.log('message... - ', newMessage);
         
-        callback();
-    });
-
-    socket.on('sendMessage', (message, callback) => {
-        const user = getUser(socket.id);
-        console.log(message);
-        io.to(user.room).emit('message', { user: user.name, text: message});
+        socket.to(toUserId).emit('messageReceived', { message: newMessage });
+        nsp.to(fromUserId).emit('messageSent', { message: newMessage });
         callback();
     });
 
     socket.on('disconnect', () => {
-        console.log('User has left');
-        const user = removeUser(socket.id);
+        console.log('Refreshed');
+        // const user = users.removeUser(socket.id);
 
-        if(user) {
-            io.to(user.room).emit('message', {user: 'admin', text: `${user.name} has left!`});
-            io.to(user.room).emit('roomData', { room: user.room, users: getUsersInRoom(user.room) });
-        }
+        // if(user) {
+            // nsp.to(user.room).emit('message', {user: 'admin', text: `${user.name} has left!`});
+            // nsp.emit('roomData', { users: users.getUsersInNamespace(user.namespaceId) });
+        // }
     })
+
+    socket.on('userLeft', (userId, callback) => {
+        const user = users.getUserDetails(userId)
+        if(user) {
+            users.removeUser(userId);
+            console.log(user.namespaceId, 'socket left')
+            nsp.emit('roomData', { users: users.getUsersInNamespace(user.namespaceId)});
+        }
+        callback()
+    })
+
+    console.log(socket.id);
 });
 

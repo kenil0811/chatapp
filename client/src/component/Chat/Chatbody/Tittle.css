@@ -1,0 +1,17 @@
+.chat-title{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: #001613;
+    background: #eee;
+    font-weight: bold;
+    font-size: 1rem;
+    box-shadow: 0 1px 3px -1px rgba(0, 0, 0, 0.75);
+    padding: 10px 0 10px 10px;
+}
+@media(max-width: 786px) {
+    .chat-title{
+        font-size: 1rem!important;
+        font-weight: 500;
+    }
+}

@@ -1,0 +1,38 @@
+.conversation-list{
+    display: inline-block;
+    margin-left: 10px;
+}
+.conversation:hover{
+    background: #00BFA6;
+    color: #eeeeee;
+}
+.conversation{
+    display: inline-flex;  
+    align-items: center;
+    flex-direction: column;
+
+}
+.conversation .img{
+    margin-bottom: 2px;
+}
+.conversation .title-text{
+    font-weight: bold;
+    font-size: 1rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+.conversation .title-text > p{
+    font-weight: 500;
+    display: flex;
+    justify-content: center;
+    place-items: center;
+    font-size: small;
+
+}
+.title-change{
+    background: #c6dcf5;
+}
+.title-back{
+    background: #ffffff;
+}

@@ -1,0 +1,26 @@
+.timer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-left: 1rem;
+  font-weight: 600;
+}
+.timer h1{
+  font-family: 'Orbitron', sans-serif;
+}
+.timer .MuiAlert-root{
+  padding: 0;
+}
+.profile img {
+  border: 2px solid #00bfa6;
+  border-radius: 100%;
+}
+.user-area {
+  overflow: auto;
+  white-space: nowrap;
+}
+@media (max-width: 768px) {
+  .user-area::-webkit-scrollbar {
+    display: none;
+  }
+}
