@@ -3,11 +3,11 @@ import React from 'react';
 import './Tittle.css';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
 
-function Title( { about } ) {
+function Title( { name,about } ) {
     return (
         <div className="chat-title">
             {/* {console.log(about)} */}
-            <span>{about}</span>
+            <span>{`${name}`} <br />{`${about}`} </span>
             <IconButton><MoreVertIcon fontSize="large" /></IconButton>
         </div>
     )
