@@ -1,4 +1,5 @@
 .timer {
+  overflow: hidden;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -10,6 +11,12 @@
 }
 .timer .MuiAlert-root{
   padding: 0;
+}
+.profile{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
 }
 .profile img {
   border: 2px solid #00bfa6;
@@ -23,4 +30,50 @@
   .user-area::-webkit-scrollbar {
     display: none;
   }
+}
+
+.main .swiper-container {
+  width: 100%;
+}
+.main .swiper-slide{
+  background-position: center;
+  background-size: cover;
+  width: 300px;
+}
+.main .swiper-slide{
+  filter: blur(0px);
+}
+.main .swiper-slide-active{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  filter:drop-shadow(1px 1px 1px rgba(255, 255, 255, 0.7));
+  border-radius: 10px;
+  background-color: #eee;
+  box-shadow:  5px 5px 5px 0px  rgba(0, 0, 0, 0.5);
+-webkit-box-shadow: 5px 5px 5px 0px  rgba(0, 0, 0, 0.5);
+-moz-box-shadow: 5px 5px 5px 0px  rgba(0,0, 0, 0.5);
+}
+.search{
+  background-color: #f0f3ff;
+  border-radius: 30px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-shadow: 6px 6px 10px -1px rgba(0, 0, 0, 0.15),
+   -6px -6px 10px -1px rgba(255, 255, 255, 0.7);
+}
+.search:hover{
+  box-shadow: inset 6px 6px 10px -1px rgba(0, 0, 0, 0.15),
+   inset -6px -6px 10px -1px rgba(255, 255, 255, 0.7);
+}
+.search input{
+  font-size: 20px;
+  border: none;
+  background: transparent;
+  outline: none;
+
+}
+.search .active{
+  width: 0px;
 }
