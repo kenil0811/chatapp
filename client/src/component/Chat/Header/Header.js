@@ -1,45 +1,57 @@
-import { Avatar, IconButton } from '@material-ui/core';
 import React, { useState } from 'react';
 import User from "./User";
 import './Header.css';
-import Timer from './Timer';
-
-import { Search } from '@material-ui/icons';
 import { Swiper, SwiperSlide } from "swiper/react";
+import Search from "./Search";
+import Profile from './Profile';
 import "swiper/swiper.min.css";
-import "swiper/components/navigation/navigation.min.css";
-import SwiperCore, { Navigation } from 'swiper/core';
-SwiperCore.use([Navigation]);
+import { useMediaPredicate } from "react-media-hook";
 
 function Header({ userId, users, onChange, pendingUsers }) {
-    const [state, setState] = useState({ clicked: false });
-    const handleClick = () => {
-        setState({ clicked: !state.clicked })
+    const scr400 = useMediaPredicate("(max-width: 400px");
+    const [searchTerm, setSearch] = useState("");
+    const [searchResults, setSearchResults] = useState([]);
+    const userObject = {
+        name: "undefined",
     }
+    const searchHandler = (searchTerm) => {
+        setSearch(searchTerm);
+        if (searchTerm !== "") {
+            const newContactList = users.filter((user) => {
+                return Object.values(user).join(" ").toLowerCase().includes(searchTerm.toLowerCase());
+            });
+            setSearchResults(newContactList);
+        }
+        else{
+            setSearchResults(users);
+        }
+    };
     return (
         <div className="main">
             <div className="timer">
-                <div className="search">
-                    <IconButton onClick={handleClick}><Search /></IconButton>
-                    <input type="text" placeholder={`Search ${users}`} className={state.clicked ? null : "active"} />
-                </div>
-                <div className="logo">
-                    <IconButton style={{ color: "#00bfa6", fontFamily: "cursive", fontSize: "xx-large" }}>Socialise</IconButton>
-                </div>
-                <div className="profile"><Timer /><IconButton><Avatar src={`https://avatars.dicebear.com/api/human/${users}.svg`} alt="" /></IconButton></div>
+                {/* search Bar */}
+                <Search term={searchTerm} searchKeyword={searchHandler} />
+                {/* logo */}
+                <div className="logo"  style={{ color: "#00bfa6", fontFamily: "cursive", fontSize: "x-large" }}>Socialise</div>
+                {/* Profile Pic */}
+                <Profile user={users.length > 0 ? users.find((user) => (user.userId === userId)) : userObject} />
             </div>
-            <Swiper loop={false} slidesPerView={3} centeredSlides={true} navigation={true} className="user-area mySwiper">
-                {
-                    userId && users.length > 0 ?
-                        <SwiperSlide onClick={() => { onChange(userId) }}>
-                            {console.log(userId, users)}
-                            <User user={users.find((user) => user.userId === userId)} />
-                        </SwiperSlide>
-                        : null
-                }
-                {
-                    users
-                        ? (users.map((user) => (
+            <Swiper loop={false} slidesPerView={scr400 ? 3 : 8} spaceBetween={scr400 ? 50 : 30} centeredSlides={true} className="user-area mySwiper">
+                {searchTerm.length < 1 ?
+                     users ? 
+                        (users.map((user) => (
+                            user.userId !== userId ?
+                                <SwiperSlide onClick={() => { onChange(user.userId) }}>
+                                    {
+                                        pendingUsers.find((pendingUserId) => user.userId === pendingUserId) ?
+                                            <User user={ user} pending={true} /> :
+                                            <User user={ user} pending={false} />
+                                    }
+                                </SwiperSlide> : null
+                        )))
+                        :null
+                     : searchResults ? 
+                        (searchResults.map((user) => (
                             user.userId !== userId ?
                                 <SwiperSlide onClick={() => { onChange(user.userId) }}>
                                     {
@@ -49,7 +61,7 @@ function Header({ userId, users, onChange, pendingUsers }) {
                                     }
                                 </SwiperSlide> : null
                         )))
-                        : null
+                        :null
                 }
 
             </Swiper>

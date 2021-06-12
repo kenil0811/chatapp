@@ -14,6 +14,7 @@ import "swiper/components/effect-coverflow/effect-coverflow.min.css";
 import "swiper/components/navigation/navigation.min.css";
 import { Swiper, SwiperSlide } from "swiper/react";
 import SwiperCore, { EffectCoverflow, Pagination, Navigation } from "swiper/core";
+import Profile from "./Profile";
 
 SwiperCore.use([EffectCoverflow, Pagination, Navigation]);
 
@@ -27,8 +28,10 @@ const Join = () => {
   const [about, setAbout] = useState("");
   const [location, setLocation] = useState({});
   const [namespaceId, setNamespaceId] = useState(0);
-  const [maxCount] = useState(100);
+  const [maxCount] = useState(50);
   const [count, setCount] = useState(10);
+  const [profile] = useState(Profile);
+  const [inputProfile, setinputProfile] = useState("");
 
   useEffect(() => {
 
@@ -51,7 +54,6 @@ const Join = () => {
     }
   }, []);
 
-
   const checkNull = async (event) => {
     if (!name || !profession || !about) {
       alert("Please fill in your Details");
@@ -70,7 +72,7 @@ const Join = () => {
       const requestOptions = {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ 'name': name, 'profession': profession, 'about': about, 'namespaceId': namespaceId })
+        body: JSON.stringify({ 'name': name, 'profession': profession, 'about': about, 'namespaceId': namespaceId, 'profile': inputProfile })
       };
 
       let res = await fetch(`${ENDPOINT}/addDetails`, requestOptions)
@@ -106,6 +108,14 @@ const Join = () => {
     input.addEventListener("blur", removeClass);
   });
 
+  const handelProfile = (event) => {
+    if (document.querySelector(".swiper-slide-active img")) {
+      event = document.querySelector(".swiper-slide-active img").alt;
+      setinputProfile(event);
+    }
+  };
+  // console.log(inputProfile);
+
   return (
     <div>
       <img className="wave" src={wave} alt="Wave" />
@@ -129,15 +139,18 @@ const Join = () => {
                   'slideShadows': false
                 }}
                 navigation={false}
+                onTransitionStart={handelProfile}
                 className="mySwiper">
                 <div class="swiper-wrapper">
-                  <SwiperSlide><img src={`https://avatars.dicebear.com/api/initials/${name}.svg`} alt="" /></SwiperSlide>
-                  <SwiperSlide><img src={`https://avatars.dicebear.com/api/avataaars/${name[0]}.svg`} alt="" /></SwiperSlide>
-                  <SwiperSlide><img src={`https://avatars.dicebear.com/api/micah/${profession}.svg`} alt="" /></SwiperSlide>
-                  <SwiperSlide><img src={`https://avatars.dicebear.com/api/gridy/${profession[0]}.svg`} alt="" /></SwiperSlide>
-                  <SwiperSlide><img src={`https://avatars.dicebear.com/api/female/${name}.svg`} alt="" /></SwiperSlide>
-                  <SwiperSlide><img src={`https://avatars.dicebear.com/api/male/${name}.svg`} alt="" /></SwiperSlide>
-                  <SwiperSlide><img src={`https://avatars.dicebear.com/api/bottts/${name[1]}.svg`} alt="" /></SwiperSlide>
+                  {profile.map((elem) => {
+                    const { id, variation } = elem;
+                    return (
+                      <SwiperSlide key={id}>
+                        <img src={`https://avatars.dicebear.com/api/${variation}/${name}.svg`} alt={variation} />
+                      </SwiperSlide>
+                    )
+                  })
+                  }
                 </div>
               </Swiper>
             </div>
@@ -177,14 +190,14 @@ const Join = () => {
                   spellcheck="True"
                   maxLength={maxCount}
                   onChange={(event) => setAbout(event.target.value)}
-                  style={count <= 50 ? count <= 10 ? { color: "#ff5722" } : { color: "#4caf50" } : null}
+                  style={count <= 25 ? count <= 10 ? { color: "#ff5722" } : { color: "#4caf50" } : null}
                 />
                 <p className="show" style={count <= 50 ? count <= 10 ? { color: "#ff5722", fontWeight: "bolder" } : { color: "#4caf50", fontWeight: "bolder" } : null}>{count}</p>
               </div>
             </div>
             <button className="btn" type="button" onClick={(event) => checkNull(event)}>
               Proceed
-              </button>
+            </button>
           </div>
         </div>
       </div>

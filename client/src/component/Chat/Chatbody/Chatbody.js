@@ -16,7 +16,7 @@ function Chatbody( { namespaceId, userId, currentChatuserId, addPendingUsers, re
     const [messages, setMessages] = useState([]);
 
     useEffect(() => {
-        if(userId != 0) {
+        if(userId !== 0) {
             console.log(currentChatuserId)
             removePendingUsers(currentChatuserId);
             socket = io(ENDPOINT + '/' + namespaceId);
@@ -50,7 +50,6 @@ function Chatbody( { namespaceId, userId, currentChatuserId, addPendingUsers, re
             }
         }
     }, [currentChatuserId])
-
 
     useEffect(() => {
 
@@ -102,7 +101,7 @@ function Chatbody( { namespaceId, userId, currentChatuserId, addPendingUsers, re
 
     return (
         <div>
-            <Tittle about={user.about}/>
+            <Tittle name={user.name} about={user.about}/>
             <Messages userId={userId} messages={messages} />
             <div className="footer">
                 <Form message={message} func={func} sendMessage={sendMessage} />

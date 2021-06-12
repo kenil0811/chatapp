@@ -39,7 +39,7 @@ export default class Timer extends Component {
             <div>
                 { minutes === 0 && seconds === 0
                     ? <Alert variant={false} severity="warning" style={{ color: "crimson", fontFamily: "sans-serif", position: 'absolute', top: '0', left: '0' }}></Alert>
-                    : <pre style={{ color: "#4667C9", fontFamily: "fantasy", position: "absolute", top: "0", left: "0" }}>{minutes} : {seconds < 10 ? `0${seconds}` : seconds}</pre>
+                    : <pre style={{ color: "#4667C9", fontFamily: "fantasy", position: "relative", top: "0", left: "0" }}>{minutes} : {seconds < 10 ? `0${seconds}` : seconds}</pre>
                 }
             </div>
         )
