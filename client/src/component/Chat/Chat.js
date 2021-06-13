@@ -75,8 +75,7 @@ const Chat = ({ location }) => {
   }
 
   const addPendingUsers = (userId) => {
-    setPendingUsers(pendingUsers => [ ...pendingUsers, userId ]);
-    // need sorting
+    setPendingUsers(pendingUsers => [...pendingUsers, userId]);
   }
 
   const removePendingUsers = (userId) => {

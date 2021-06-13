@@ -9,15 +9,14 @@ import './Chatbody.css';
 const ENDPOINT = 'http://localhost:5000';
 let socket;
 
-function Chatbody( { namespaceId, userId, currentChatuserId, addPendingUsers, removePendingUsers } ) {
-    // console.log(typeof userId, typeof currentChatuserId)
+function Chatbody({ namespaceId, userId, currentChatuserId, addPendingUsers, removePendingUsers }) {
     const [user, setUser] = useState({});
     const [message, setMessage] = useState('');
     const [messages, setMessages] = useState([]);
 
     useEffect(() => {
         if(userId !== 0) {
-            console.log(currentChatuserId)
+            // console.log(currentChatuserId)
             removePendingUsers(currentChatuserId);
             socket = io(ENDPOINT + '/' + namespaceId);
             socket.emit('joinChat', { userId }, (error) => {
@@ -49,7 +48,7 @@ function Chatbody( { namespaceId, userId, currentChatuserId, addPendingUsers, re
                 });
             }
         }
-    }, [currentChatuserId])
+    }, [addPendingUsers, currentChatuserId, namespaceId, removePendingUsers, userId])
 
     useEffect(() => {
 
@@ -75,7 +74,7 @@ function Chatbody( { namespaceId, userId, currentChatuserId, addPendingUsers, re
             }
         )
         
-    }, [currentChatuserId])
+    }, [currentChatuserId, userId])
 
     // useEffect(() => {
     // }, [mess]);

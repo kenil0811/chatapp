@@ -8,6 +8,7 @@ import "swiper/swiper.min.css";
 import { useMediaPredicate } from "react-media-hook";
 
 function Header({ userId, users, onChange, pendingUsers }) {
+    users = users.sort((a, b) => (a.name > b.name) ? 1 : -1); //Sorting
     const scr400 = useMediaPredicate("(max-width: 400px");
     const [searchTerm, setSearch] = useState("");
     const [searchResults, setSearchResults] = useState([]);
@@ -22,7 +23,7 @@ function Header({ userId, users, onChange, pendingUsers }) {
             });
             setSearchResults(newContactList);
         }
-        else{
+        else {
             setSearchResults(users);
         }
     };
@@ -32,25 +33,25 @@ function Header({ userId, users, onChange, pendingUsers }) {
                 {/* search Bar */}
                 <Search term={searchTerm} searchKeyword={searchHandler} />
                 {/* logo */}
-                <div className="logo"  style={{ color: "#00bfa6", fontFamily: "cursive", fontSize: "x-large" }}>Socialise</div>
+                <div className="logo" style={{ color: "#00bfa6", fontFamily: "cursive", fontSize: "x-large" }}>Socialise</div>
                 {/* Profile Pic */}
                 <Profile user={users.length > 0 ? users.find((user) => (user.userId === userId)) : userObject} />
             </div>
             <Swiper loop={false} slidesPerView={scr400 ? 3 : 8} spaceBetween={scr400 ? 50 : 30} centeredSlides={true} className="user-area mySwiper">
                 {searchTerm.length < 1 ?
-                     users ? 
+                    users ?
                         (users.map((user) => (
                             user.userId !== userId ?
                                 <SwiperSlide onClick={() => { onChange(user.userId) }}>
                                     {
                                         pendingUsers.find((pendingUserId) => user.userId === pendingUserId) ?
-                                            <User user={ user} pending={true} /> :
-                                            <User user={ user} pending={false} />
+                                            <User user={user} pending={true} /> :
+                                            <User user={user} pending={false} />
                                     }
                                 </SwiperSlide> : null
                         )))
-                        :null
-                     : searchResults ? 
+                        : null
+                    : searchResults ?
                         (searchResults.map((user) => (
                             user.userId !== userId ?
                                 <SwiperSlide onClick={() => { onChange(user.userId) }}>
@@ -61,7 +62,7 @@ function Header({ userId, users, onChange, pendingUsers }) {
                                     }
                                 </SwiperSlide> : null
                         )))
-                        :null
+                        : null
                 }
 
             </Swiper>
