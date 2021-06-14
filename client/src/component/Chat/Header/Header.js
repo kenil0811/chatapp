@@ -1,51 +1,71 @@
-import { Avatar, IconButton } from '@material-ui/core';
-import React from 'react';
+import React, { useState } from 'react';
 import User from "./User";
-import Button from '@material-ui/core/Button';
 import './Header.css';
-import Timer from './Timer';
+import { Swiper, SwiperSlide } from "swiper/react";
+import Search from "./Search";
+import Profile from './Profile';
+import "swiper/swiper.min.css";
+import { useMediaPredicate } from "react-media-hook";
 
-function Header( { userId, users, onChange, pendingUsers } ) {
+function Header({ userId, users, onChange, pendingUsers }) {
+    users = users.sort((a, b) => (a.name > b.name) ? 1 : -1); //Sorting
+    const scr400 = useMediaPredicate("(max-width: 400px");
+    const [searchTerm, setSearch] = useState("");
+    const [searchResults, setSearchResults] = useState([]);
+    const userObject = {
+        name: "undefined",
+    }
+    const searchHandler = (searchTerm) => {
+        setSearch(searchTerm);
+        if (searchTerm !== "") {
+            const newContactList = users.filter((user) => {
+                return Object.values(user).join(" ").toLowerCase().includes(searchTerm.toLowerCase());
+            });
+            setSearchResults(newContactList);
+        }
+        else {
+            setSearchResults(users);
+        }
+    };
     return (
-        <div>
+        <div className="main">
             <div className="timer">
-                <IconButton>
-                    <Timer />
-                </IconButton>
-                <IconButton style={{ color: "#00bfa6", fontFamily: "cursive", fontSize: "xx-large" }}>
-                    <span>Socialise</span>
-                </IconButton>
-                <div className="profile">
-                    <IconButton>
-                        <Avatar src="https://avatars.dicebear.com/api/male/:srk.svg" alt="" />
-                    </IconButton>
-                </div>
+                {/* search Bar */}
+                <Search term={searchTerm} searchKeyword={searchHandler} />
+                {/* logo */}
+                <div className="logo" style={{ color: "#00bfa6", fontFamily: "cursive", fontSize: "x-large" }}>Socialise</div>
+                {/* Profile Pic */}
+                <Profile user={users.length > 0 ? users.find((user) => (user.userId === userId)) : userObject} />
             </div>
-            <div className="user-area">
-                {
-                    userId && users.length>0 ?
-                    <Button onClick={() => {onChange(userId)}}>
-                        {console.log(userId, users)}
-                        <User user={users.find((user) => user.userId == userId)}/>
-                    </Button> 
-                    : null
-                }
-                {
-                    users 
-                    ? ( users.map((user) => (
-                        user.userId != userId ?
-                        <Button onClick={() => {onChange(user.userId)}}>
-                            {
-                                pendingUsers.find((pendingUserId) => user.userId == pendingUserId) ?
-                                <User user={user} pending={true} /> :
-                                <User user={user} pending={false} />
-                            }
-                        </Button> : null
-                    )))
-                    : null
+            <Swiper loop={false} slidesPerView={scr400 ? 3 : 8} spaceBetween={scr400 ? 50 : 30} centeredSlides={true} className="user-area mySwiper">
+                {searchTerm.length < 1 ?
+                    users ?
+                        (users.map((user) => (
+                            user.userId !== userId ?
+                                <SwiperSlide onClick={() => { onChange(user.userId) }}>
+                                    {
+                                        pendingUsers.find((pendingUserId) => user.userId === pendingUserId) ?
+                                            <User user={user} pending={true} /> :
+                                            <User user={user} pending={false} />
+                                    }
+                                </SwiperSlide> : null
+                        )))
+                        : null
+                    : searchResults ?
+                        (searchResults.map((user) => (
+                            user.userId !== userId ?
+                                <SwiperSlide onClick={() => { onChange(user.userId) }}>
+                                    {
+                                        pendingUsers.find((pendingUserId) => user.userId === pendingUserId) ?
+                                            <User user={user} pending={true} /> :
+                                            <User user={user} pending={false} />
+                                    }
+                                </SwiperSlide> : null
+                        )))
+                        : null
                 }
 
-            </div>
+            </Swiper>
         </div>
     )
 }

@@ -4,7 +4,7 @@ import './Message.css';
 function Message( { message, userId } ) {
 
     return (
-        message.fromUserId == userId
+        message.fromUserId === userId
         ? (
             <div className="message">
                 <p className={`chat-message chat-sender`}>

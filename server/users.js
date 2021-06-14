@@ -1,9 +1,9 @@
 const users = [];
 var num=0;
 
-const addUserDetails = ({ name, profession, about, namespaceId }) => {
+const addUserDetails = ({ name, profession, about, namespaceId, profile }) => {
     const userId = Math.floor(Math.random()*100000 + 1);
-    const user = { userId, name, profession, about, namespaceId };
+    const user = { userId, name, profession, about, namespaceId, profile };
     users.push(user);
     return userId;
 }

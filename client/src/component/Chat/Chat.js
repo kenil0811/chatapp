@@ -27,7 +27,7 @@ const Chat = ({ location }) => {
       let res = await fetch(`${ENDPOINT}/getDetails?userId=${userId}`)
       let result = await res.json();
 
-      if(result.status == "success") {
+      if(result.status === "success") {
         const namespaceId = result.data.namespaceId;
         setNamespaceId(namespaceId)
 
@@ -37,9 +37,9 @@ const Chat = ({ location }) => {
           if(error)
             alert(error);
         });
-
+        // Room Data
         socket.on('roomData', ({ users }) => {
-          let temp = users.find((user) => user.userId != userId)
+          let temp = users.find((user) => user.userId !== userId)
           if(temp) {
             setCurrentChatUserId(temp.userId)
           }
@@ -63,7 +63,7 @@ const Chat = ({ location }) => {
       }
     })    
 
-  }, [ENDPOINT, location.search]);
+  }, [ENDPOINT, history, location.search]);
 
   const removeUser = async (userId) => {
     console.log(userId, ENDPOINT)
@@ -75,12 +75,12 @@ const Chat = ({ location }) => {
   }
 
   const addPendingUsers = (userId) => {
-    setPendingUsers(pendingUsers => [ ...pendingUsers, userId ]);
+    setPendingUsers(pendingUsers => [...pendingUsers, userId]);
   }
 
   const removePendingUsers = (userId) => {
-    const index = pendingUsers.findIndex((pendingUserId) => pendingUserId == userId);
-    if(index != -1) {
+    const index = pendingUsers.findIndex((pendingUserId) => pendingUserId === userId);
+    if(index !== -1) {
       console.log(pendingUsers.splice(index, 1))
     }
       // setPendingUsers(pendingUsers.splice(index, 1));
@@ -89,6 +89,7 @@ const Chat = ({ location }) => {
   return (
     <div className="chat-container">
       <Header userId={userId} users={users} onChange={setCurrentChatUserId} pendingUsers={pendingUsers}/>
+      
       <Chatbody namespaceId={namespaceId} userId={userId} currentChatuserId={currentChatuserId} addPendingUsers={addPendingUsers} removePendingUsers={removePendingUsers}/>
     </div>
 

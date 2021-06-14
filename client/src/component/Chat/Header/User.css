@@ -2,25 +2,28 @@
     display: inline-block;
     margin-left: 10px;
 }
-.conversation:hover{
+/* .conversation:hover{
     background: #00BFA6;
     color: #eeeeee;
-}
+} */
 .conversation{
     display: inline-flex;  
     align-items: center;
     flex-direction: column;
+    /* border: 2px solid red; */
 
 }
 .conversation .img{
     margin-bottom: 2px;
+    margin-top: 5px;
 }
 .conversation .title-text{
-    font-weight: bold;
     font-size: 1rem;
-    white-space: nowrap;
     overflow: hidden;
+    white-space: nowrap;
     text-overflow: ellipsis;
+    max-width: 100px;
+    font-weight: bold;
 }
 .conversation .title-text > p{
     font-weight: 500;
@@ -31,7 +34,13 @@
 
 }
 .title-change{
-    background: #c6dcf5;
+    position: absolute;
+    height: 10px;
+    width: 10px;
+    background-color: #00BFA6;
+    border-radius: 50%;
+    top: 0.3rem;
+    right: 0.5rem;
 }
 .title-back{
     background: #ffffff;
