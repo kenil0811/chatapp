@@ -1,15 +1,19 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
 import User from "./User";
 import './Header.css';
 import { Swiper, SwiperSlide } from "swiper/react";
+import SwiperCore, { EffectCoverflow } from "swiper/core";
 import Search from "./Search";
-import Profile from './Profile';
+import Profile from "./Profile";
 import "swiper/swiper.min.css";
+import "swiper/components/effect-coverflow/effect-coverflow.min.css";
 import { useMediaPredicate } from "react-media-hook";
+
+SwiperCore.use([EffectCoverflow]);
 
 function Header({ userId, users, onChange, pendingUsers }) {
     users = users.sort((a, b) => (a.name > b.name) ? 1 : -1); //Sorting
-    const scr400 = useMediaPredicate("(max-width: 400px");
+    const swiper500 = useMediaPredicate("(max-width: 500px");
     const [searchTerm, setSearch] = useState("");
     const [searchResults, setSearchResults] = useState([]);
     const userObject = {
@@ -37,7 +41,7 @@ function Header({ userId, users, onChange, pendingUsers }) {
                 {/* Profile Pic */}
                 <Profile user={users.length > 0 ? users.find((user) => (user.userId === userId)) : userObject} />
             </div>
-            <Swiper loop={false} slidesPerView={scr400 ? 3 : 8} spaceBetween={scr400 ? 50 : 30} centeredSlides={true} className="user-area mySwiper">
+            <Swiper loop={false} grabCursor={true} watchSlidesVisibility={true} slidesPerView={swiper500 ? 3 : 6} spaceBetween={swiper500 ? 50 : 30} centeredSlides={true} className="user-area mySwiper">
                 {searchTerm.length < 1 ?
                     users ?
                         (users.map((user) => (
