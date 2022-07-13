@@ -14,7 +14,7 @@ import "swiper/components/effect-coverflow/effect-coverflow.min.css";
 import "swiper/components/navigation/navigation.min.css";
 import { Swiper, SwiperSlide } from "swiper/react";
 import SwiperCore, { EffectCoverflow, Pagination, Navigation } from "swiper/core";
-import Profile from "./Profile";
+import Profile from "./Avators";
 
 SwiperCore.use([EffectCoverflow, Pagination, Navigation]);
 
